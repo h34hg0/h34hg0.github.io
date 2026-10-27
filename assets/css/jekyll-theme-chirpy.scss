@@ -102,6 +102,8 @@ html.fx-cursor, html.fx-cursor * { cursor: none !important; }
   transform-origin: 85% 100%; transition: opacity .2s, transform .2s; pointer-events: none; }
 .fx-buddy.fx-talk .fx-bubble { opacity: 1; transform: none; }
 #back-to-top { bottom: 8.5rem !important; }
+/* keep Chirpy's "새 콘텐츠가 있습니다 / 업데이트" toast above #main-wrapper (z-index 1), particles and the buddy */
+#notification { z-index: 10000 !important; }
 @media (max-width: 767px) { .fx-buddy { display: none; } }
 
 @media (prefers-reduced-motion: reduce) {
