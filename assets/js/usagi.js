@@ -7,7 +7,7 @@
 
   const CFG = {
     scale: 55, faceX: 0, faceY: 115, tracking: 133, flip: false, angry: false,
-    postureEnabled: true, postureMinutes: 37, postureMessage: '허리 펴! 우라!',
+    postureEnabled: false, postureMinutes: 37, postureMessage: '허리 펴! 우라!',
   };
   const IMG = '/assets/img/buddy/';
   const SW = 471, SH = 564;                       // cropped source size (Rectangle(64,18,471,564))
