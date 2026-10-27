@@ -44,7 +44,7 @@
     /* 9b. power-trace wave at the bottom of the sidebar */
     const sb = document.getElementById('sidebar');
     const wv = sb ? el('canvas', 'fx-wave', sb) : null, wg = wv && wv.getContext('2d');
-    if (wv) { wv.width = 260; wv.height = 70; }
+    if (wv) { wv.width = 260; wv.height = 100; }
     /* streaming power trace that never repeats: a random "program" of segments
        (idle / AES round: SubBytes, ShiftRows, MixColumns, AddRoundKey / memcpy / branchy code),
        clock jitter, data-dependent heavy-tailed spike heights, ringing, occasional big
@@ -107,8 +107,8 @@
 
       if (wg) {
         advance(L1, 2); advance(L2, 2);
-        wg.clearRect(0, 0, 260, 70);
-        [[L2, '#3b9bff', 41, 20], [L1, '#ff3355', 35, 24]].forEach(([L, c, mid, amp]) => {
+        wg.clearRect(0, 0, 260, 100);
+        [[L2, '#3b9bff', 58, 30], [L1, '#ff3355', 50, 36]].forEach(([L, c, mid, amp]) => {
           wg.strokeStyle = c; wg.lineWidth = 1.2; wg.shadowColor = 'rgba(0,0,0,.45)'; wg.shadowBlur = 3; wg.beginPath();
           for (let x = 0; x <= 260; x++) {
             const y = mid + L.a[Math.min(TN - 1, Math.floor(x * 1.4))] * amp;
