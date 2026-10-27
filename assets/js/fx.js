@@ -83,6 +83,24 @@
     const sb = document.getElementById('sidebar');
     const wv = sb ? el('canvas', 'fx-wave', sb) : null, wg = wv && wv.getContext('2d');
     if (wv) { wv.width = 260; wv.height = 70; }
+    /* realistic power trace: a sharp spike + ringing decay every clock cycle,
+       AES-like round envelope (SubBytes / ShiftRows / MixColumns / AddRoundKey),
+       data-dependent (Hamming weight) amplitude, baseline wander and noise. */
+    const makeTrace = (n, seed) => {
+      let s = seed; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+      const gauss = () => { let u = 0; for (let i = 0; i < 6; i++) u += rnd(); return u - 3; };
+      const spc = 5, roundLen = 46, out = new Float32Array(n);
+      for (let c = 0; c * spc < n; c++) {
+        const r = c % roundLen;
+        const env = (r < 16 ? 1.0 : r < 20 ? 0.45 : r < 36 ? 1.25 : 0.7) * (c % (roundLen * 10) < roundLen * 9 ? 1 : 0.6);
+        const A = (0.55 + 0.45 * ((rnd() * 9) | 0) / 8) * env;
+        for (let k = 0; k < spc && c * spc + k < n; k++)
+          out[c * spc + k] = (k === 0 ? -A : k === 1 ? A * 0.55 : A * 0.35 * Math.exp(-k * 0.9) * Math.cos(k * 2.2)) + 0.06 * gauss();
+      }
+      let w = 0; for (let i = 0; i < n; i++) { w = (w + 0.02 * (rnd() - 0.5)) * 0.995; out[i] += w; }
+      return out;
+    };
+    const TR1 = makeTrace(6000, 11), TR2 = makeTrace(6000, 29);
 
     let t = 0;
     (function loop() {
@@ -98,11 +116,10 @@
 
       if (wg) {
         wg.clearRect(0, 0, 260, 70);
-        ['rgba(255,255,255,.75)', 'rgba(255,255,255,.35)'].forEach((s, k) => {
-          wg.strokeStyle = s; wg.lineWidth = 1.2; wg.beginPath();
-          for (let x = 0; x <= 260; x += 2) {
-            const q = x + t * 1.2 + k * 40, spike = Math.floor(q / 37) % 5 === 0 ? Math.sin(q * 1.3) * 18 : 0;
-            const y = 38 + k * 8 + Math.sin(q * 0.08) * 6 + Math.sin(q * 0.31) * 3 + spike;
+        [[TR2, 'rgba(255,255,255,.3)', 300, 40, 20], [TR1, 'rgba(255,255,255,.8)', 0, 35, 26]].forEach(([d, c, off, mid, amp]) => {
+          wg.strokeStyle = c; wg.lineWidth = 1; wg.beginPath();
+          for (let x = 0; x <= 260; x++) {
+            const y = mid + d[(Math.floor(x * 1.4) + t * 2 + off) % d.length] * amp;
             x ? wg.lineTo(x, y) : wg.moveTo(x, y);
           }
           wg.stroke();
