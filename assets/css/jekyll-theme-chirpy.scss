@@ -85,26 +85,31 @@ html.fx-cursor, html.fx-cursor * { cursor: none !important; }
 #main-wrapper { z-index: 1; }
 .fx-wave { position: absolute; left: 0; bottom: 4.5rem; width: 100%; height: 70px; pointer-events: none; opacity: .7; }
 
-/* 10. Usagi buddy */
-.fx-buddy { position: fixed; right: 14px; bottom: 6px; z-index: 50; width: 96px; height: 112px; cursor: pointer;
-  filter: drop-shadow(0 4px 8px rgb(0 0 0 / 18%)); user-select: none; }
-.fx-buddy img { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; -webkit-user-drag: none; }
-.fx-buddy .fx-face { transition: transform .08s linear; will-change: transform; }
-.fx-buddy.fx-hop { animation: fx-hop .45s ease; }
-.fx-buddy.fx-tap { animation: fx-tap .12s ease; }
-@keyframes fx-tap { 50% { transform: translateY(2px) scale(1.02, .98); } }
-.fx-buddy.fx-sleep { animation: fx-breathe 3s ease-in-out infinite; }
-@keyframes fx-hop { 30% { transform: translateY(-14px); } 60% { transform: translateY(0); } 80% { transform: translateY(-4px); } }
-@keyframes fx-breathe { 50% { transform: scale(1.03, .97) translateY(2px); } }
-.fx-bubble { position: absolute; right: 52px; bottom: 92px; width: 170px; height: 111px; display: grid; place-items: center;
-  background: url('/assets/img/buddy/bubble.webp') center / contain no-repeat; color: #3b2a26; font-size: 13px; font-weight: 600;
-  text-align: center; padding: 0 18px 22px; box-sizing: border-box; opacity: 0; transform: translateY(6px) scale(.9);
-  transform-origin: 85% 100%; transition: opacity .2s, transform .2s; pointer-events: none; }
-.fx-buddy.fx-talk .fx-bubble { opacity: 1; transform: none; }
-#back-to-top { bottom: 8.5rem !important; }
+/* 10. Usagi pet (assets/js/usagi.js, port of UsagiDesktopPet) */
+.usagi-pet { position: fixed; z-index: 60; cursor: grab; user-select: none; -webkit-user-drag: none; }
+.usagi-pet:active { cursor: grabbing; }
+.usagi-menu { position: fixed; z-index: 10001; display: none; min-width: 120px; padding: 4px; border-radius: 6px;
+  background: var(--card-bg); border: 1px solid var(--main-border-color); box-shadow: 0 6px 20px rgb(0 0 0 / 25%); }
+.usagi-menu.on { display: block; }
+.usagi-menu button { display: block; width: 100%; text-align: left; border: 0; background: none; color: var(--text-color);
+  padding: 5px 10px; font-size: 13px; border-radius: 4px; }
+.usagi-menu button:hover { background: var(--sidebar-hover-bg); }
+.usagi-menu hr { margin: 3px 0; opacity: .3; }
+.usagi-bubble { position: fixed; z-index: 61; }
+.usagi-bubble-art { position: absolute; inset: 0; background: url('/assets/img/buddy/speech_bubble.webp') center / 100% 100% no-repeat; }
+.usagi-bubble.flipped .usagi-bubble-art { transform: scaleX(-1); }
+.usagi-bubble-text { position: absolute; left: 14%; top: 13%; width: 70%; height: 52%; display: flex; align-items: center;
+  justify-content: center; text-align: center; font-family: 'Malgun Gothic', sans-serif; font-weight: 700; font-size: 19px;
+  color: rgb(62 40 36); overflow: hidden; }
+.usagi-bubble-x { position: absolute; left: calc(72% - 19px); top: calc(38% - 19px); width: 38px; height: 38px; border: 0;
+  background: none; cursor: pointer; }
+.usagi-bubble-x::before, .usagi-bubble-x::after { content: ''; position: absolute; left: 50%; top: 50%; width: 17px; height: 2.3px;
+  border-radius: 2px; background: rgb(62 40 36); }
+.usagi-bubble-x::before { transform: translate(-50%, -50%) rotate(45deg); }
+.usagi-bubble-x::after { transform: translate(-50%, -50%) rotate(-45deg); }
+#back-to-top { bottom: 22rem !important; }
 /* keep Chirpy's "새 콘텐츠가 있습니다 / 업데이트" toast above #main-wrapper (z-index 1), particles and the buddy */
 #notification { z-index: 10000 !important; }
-@media (max-width: 767px) { .fx-buddy { display: none; } }
 
 @media (prefers-reduced-motion: reduce) {
   #sidebar { animation: none; }

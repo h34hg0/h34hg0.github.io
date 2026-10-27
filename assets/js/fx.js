@@ -1,6 +1,5 @@
 /* Blog interaction effects (cursor, click ripple, trail, progress bar,
- * typing subtitle, card reveal, background particles, sidebar power trace,
- * Usagi buddy that looks at the cursor).
+ * typing subtitle, card reveal, background particles, sidebar power trace).
  * Motion effects are skipped when the OS asks for reduced motion;
  * cursor effects only run on devices with a fine pointer (mouse). */
 (() => {
@@ -17,7 +16,7 @@
     addEventListener('mousemove', (e) => {
       x = e.clientX; y = e.clientY;
       dot.style.transform = `translate(${x}px, ${y}px)`;
-      ring.classList.toggle('fx-big', !!(e.target.closest && e.target.closest('a, button, input, label, [role="button"], .card-wrapper, .fx-buddy')));
+      ring.classList.toggle('fx-big', !!(e.target.closest && e.target.closest('a, button, input, label, [role="button"], .card-wrapper, .usagi-pet')));
     });
     document.addEventListener('mouseleave', () => { dot.style.opacity = ring.style.opacity = 0; });
     document.addEventListener('mouseenter', () => { dot.style.opacity = ring.style.opacity = 1; });
@@ -70,49 +69,6 @@
       cards.forEach((c, i) => { c.classList.add('fx-reveal'); c.style.transitionDelay = Math.min(i, 4) * 60 + 'ms'; io.observe(c); });
     }
 
-
-    /* 10. Usagi buddy (bottom-right): face looks toward the cursor, paws swap on key press,
-       falls asleep after 25s without input, reacts + talks on click. */
-    if (innerWidth >= 768) {
-      const IMG = '/assets/img/buddy/';
-      const b = el('div', 'fx-buddy');
-      b.innerHTML = `<div class="fx-bubble"><span></span></div>
-        <img class="fx-body" src="${IMG}body_base_1.webp" alt="">
-        <img class="fx-face" src="${IMG}face_default.webp" alt="">`;
-      const body = b.querySelector('.fx-body'), face = b.querySelector('.fx-face'), say = b.querySelector('.fx-bubble span');
-      ['body_base_2', 'body_base_sleep_1', 'face_angry', 'face_sleep'].forEach((n) => { new Image().src = IMG + n + '.webp'; });
-      let mood = 'idle', frame = 0, lastInput = Date.now(), moodTimer, hide;
-      const setFace = (n) => { face.src = IMG + n + '.webp'; };
-      const wake = () => { lastInput = Date.now(); if (mood === 'sleep') { mood = 'idle'; setFace('face_default'); body.src = IMG + (frame ? 'body_base_2' : 'body_base_1') + '.webp'; b.classList.remove('fx-sleep'); } };
-      addEventListener('mousemove', (e) => {
-        wake();
-        const r = b.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height * 0.55;
-        /* the buddy sits in the corner, so the cursor is almost always up-left of it:
-           ramp quickly (full range at ~120px away) and use a wider range so the gaze is visible */
-        const a = Math.atan2(e.clientY - cy, e.clientX - cx), d = Math.min(1, Math.hypot(e.clientX - cx, e.clientY - cy) / 120);
-        face.style.transform = `translate(${(Math.cos(a) * 14 * d).toFixed(1)}px, ${(Math.sin(a) * 11 * d).toFixed(1)}px)`;  /* stays inside the head at 96px */
-      });
-      /* typing: each key press swaps the paws (body_base_1 <-> body_base_2), like the desktop pet */
-      addEventListener('keydown', () => {
-        wake(); frame ^= 1; body.src = IMG + (frame ? 'body_base_2' : 'body_base_1') + '.webp';
-        b.classList.remove('fx-tap'); void b.offsetWidth; b.classList.add('fx-tap');
-      });
-      addEventListener('scroll', wake, { passive: true });
-      setInterval(() => {
-        if (mood !== 'sleep' && Date.now() - lastInput > 25000) {
-          mood = 'sleep'; setFace('face_sleep'); body.src = IMG + 'body_base_sleep_1.webp'; face.style.transform = ''; b.classList.add('fx-sleep');
-        }
-      }, 1000);
-      b.addEventListener('click', (e) => {
-        e.stopPropagation(); wake();
-        const poke = Math.random() < 0.3;
-        mood = poke ? 'angry' : 'idle'; setFace(poke ? 'face_angry' : 'face_default');
-        say.textContent = poke ? '하아?' : '허리 펴! 우라!';  /* same lines as the desktop pet app */
-        b.classList.remove('fx-hop'); void b.offsetWidth; b.classList.add('fx-hop', 'fx-talk');
-        clearTimeout(hide); hide = setTimeout(() => b.classList.remove('fx-talk'), 2400);
-        clearTimeout(moodTimer); moodTimer = setTimeout(() => { if (mood === 'angry') { mood = 'idle'; setFace('face_default'); } }, 1500);
-      });
-    }
 
     if (reduce) return;
 
