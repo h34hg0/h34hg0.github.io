@@ -26,6 +26,7 @@ order: 2
 | 기간 | 내용 |
 | --- | --- |
 | 20XX.XX ~ 20XX.XX | KITRI BoB (Best of the Best) 제XX기 수료 — OO트랙 |
+| 20XX.XX ~ 20XX.XX | 나이츠 프론티어 (Knights Frontier) 3기 |
 
 ## 🔬 Research & Projects
 
