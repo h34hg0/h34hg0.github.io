@@ -1,6 +1,6 @@
 ---
 title: CTF/Wargame 카테고리 소개
-date: 2026-10-27 16:28:00 +0900
+date: 2020-01-01 12:28:00 +0900
 categories: [CTF/Wargame]
 tags: [intro]
 ---

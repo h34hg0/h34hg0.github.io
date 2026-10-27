@@ -1,6 +1,6 @@
 ---
 title: Bug Bounty 카테고리 소개
-date: 2026-10-27 16:26:00 +0900
+date: 2020-01-01 12:26:00 +0900
 categories: [Bug Bounty]
 tags: [intro]
 ---
