@@ -98,12 +98,11 @@
         if (mood === 'sleep') return;
         frame ^= 1; body.src = IMG + (frame ? 'body_base_2' : 'body_base_1') + '.webp';
       }, 600);
-      const lines = ['트레이스 더 모아볼까?', '키 찾았다! 0x2B', 'TVLA |t| > 4.5 ⚠️', '해밍 가중치 몇이게?', '7.37 MHz로 달리는 중', 'CPA 돌리는 중...', '마스킹은 반칙이야', '우라!'];
       b.addEventListener('click', (e) => {
         e.stopPropagation(); wake();
         const poke = Math.random() < 0.3;
         mood = poke ? 'angry' : 'idle'; setFace(poke ? 'face_angry' : 'face_default');
-        say.textContent = poke ? '찌르지 마!' : lines[(Math.random() * lines.length) | 0];
+        say.textContent = poke ? '하아?' : '허리 펴! 우라!';  /* same lines as the desktop pet app */
         b.classList.remove('fx-hop'); void b.offsetWidth; b.classList.add('fx-hop', 'fx-talk');
         clearTimeout(hide); hide = setTimeout(() => b.classList.remove('fx-talk'), 2400);
         clearTimeout(moodTimer); moodTimer = setTimeout(() => { if (mood === 'angry') { mood = 'idle'; setFace('face_default'); } }, 1500);
