@@ -73,7 +73,7 @@ def fm_set(fm: str, key: str, value: str) -> str:
 # ---------------------------------------------------------------- helpers
 def slugify(name: str) -> str:
     s = re.sub(r"[\s_]+", "-", name.strip())
-    s = re.sub(r"[^\w\-.가-힣]", "", s)  # keep letters/digits/Korean/-/.
+    s = re.sub(r"[^\w\-가-힣]", "", s)  # keep letters/digits/Korean/-
     s = re.sub(r"-{2,}", "-", s).strip("-.")
     return s.lower() or "post"
 
@@ -266,6 +266,8 @@ def main() -> int:
         out_body = body if a.dry_run else conv.convert(body, note, slug, img_root)
         if re.search(r"\$\$|(?<![\\$])\$[^$\n]+\$", body) and fm_get(fm, "math") is None:
             fm = fm_set(fm, "math", "true")
+        if re.search(r"\{\{|\{%", body) and fm_get(fm, "render_with_liquid") is None:
+            fm = fm_set(fm, "render_with_liquid", "false")  # e.g. SSTI payloads would break the Jekyll build
         fm = fm_set(fm, "obsidian_source", f'"{rel}"')
         wanted[posts_dir / f"{day}-{slug}.md"] = f"---\n{fm.strip()}\n---\n\n{out_body.lstrip()}"
 
