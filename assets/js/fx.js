@@ -90,7 +90,7 @@
         /* the buddy sits in the corner, so the cursor is almost always up-left of it:
            ramp quickly (full range at ~120px away) and use a wider range so the gaze is visible */
         const a = Math.atan2(e.clientY - cy, e.clientX - cx), d = Math.min(1, Math.hypot(e.clientX - cx, e.clientY - cy) / 120);
-        face.style.transform = `translate(${(Math.cos(a) * 10 * d).toFixed(1)}px, ${(Math.sin(a) * 8 * d).toFixed(1)}px)`;
+        face.style.transform = `translate(${(Math.cos(a) * 14 * d).toFixed(1)}px, ${(Math.sin(a) * 11 * d).toFixed(1)}px)`;  /* stays inside the head at 96px */
       });
       /* typing: each key press swaps the paws (body_base_1 <-> body_base_2), like the desktop pet */
       addEventListener('keydown', () => {
