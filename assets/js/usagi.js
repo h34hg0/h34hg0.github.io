@@ -1,13 +1,12 @@
 /* Usagi desktop pet — web port of UsagiDesktopPet (Pet.cs / PostureBubble.cs).
  * Same artwork crop, face-on-body compositing with the body safety mask,
- * cursor gaze math, typing paw swap, 3-minute auto sleep, drag to move,
- * right-click menu and the posture reminder bubble.
- * Settings mirror the owner's usagi_settings.json. */
+ * cursor gaze math, typing paw swap, 3-minute auto sleep and the posture bubble.
+ * Blog version: smaller, fixed in the bottom-right corner, click to talk. */
 (() => {
   if (!matchMedia('(pointer: fine)').matches || innerWidth < 768) return;
 
   const CFG = {
-    scale: 126, faceX: 0, faceY: 115, tracking: 133, flip: false, angry: false,
+    scale: 55, faceX: 0, faceY: 115, tracking: 133, flip: false, angry: false,
     postureEnabled: true, postureMinutes: 37, postureMessage: '허리 펴! 우라!',
   };
   const IMG = '/assets/img/buddy/';
@@ -15,10 +14,8 @@
   const K = 0.47 * CFG.scale / 100;               // Pet.ResizeArt scale
   const W = Math.round(SW * K), H = Math.round(SH * K);
   const SLEEP_MS = 180000;                        // IsAutoSleep: 3 minutes without input
-  const store = (() => { try { return localStorage; } catch { return null; } })();
-  const saved = JSON.parse((store && store.getItem('usagi-pos')) || 'null');
-  if (store && store.getItem('usagi-hidden') === '1') return;
-  let flip = saved ? !!saved.flip : CFG.flip;
+  try { localStorage.removeItem('usagi-pos'); localStorage.removeItem('usagi-hidden'); } catch {}   // leftovers from the draggable version
+  const flip = CFG.flip;
 
   const names = ['body_base_1', 'body_base_2', 'body_base_sleep_1', 'face_default', 'face_sleep', 'face_angry',
     'mask_body_base_1', 'mask_body_base_2', 'mask_body_base_sleep_1'];
@@ -36,16 +33,11 @@
     const og = off.getContext('2d');
 
     let left, top;
-    const clamp = () => {                          // Pet.ClampLocation
-      left = Math.max(-W + 55, Math.min(innerWidth - 55, left));
-      top = Math.max(0, Math.min(innerHeight - 45, top));
+    const place = () => {                          // fixed: Pet.MoveBottomRight
+      left = innerWidth - W - 22; top = innerHeight - H + 2;
       pet.style.left = left + 'px'; pet.style.top = top + 'px';
     };
-    const home = () => { left = innerWidth - W - 22; top = innerHeight - H + 2; };   // MoveBottomRight
-    if (saved && saved.rx != null) { left = innerWidth - saved.rx; top = innerHeight - saved.by; } else home();
-    clamp();
-    const save = () => store && store.setItem('usagi-pos', JSON.stringify({ rx: innerWidth - left, by: innerHeight - top, flip }));
-    addEventListener('resize', () => { clamp(); });
+    place(); addEventListener('resize', place);
 
     /* ---------- input state ---------- */
     let frame = 0, keyPending = 0, lastActive = Date.now(), gazeX = 0, gazeY = 0;
@@ -107,46 +99,6 @@
     };
     setInterval(tick, 30); tick();
 
-    /* ---------- drag (OnPetDown/Move/Up) ---------- */
-    let drag = null;
-    pet.addEventListener('mousedown', (e) => {
-      if (e.button !== 0) return;
-      e.preventDefault();
-      drag = { sx: e.clientX, sy: e.clientY, l: left, t: top, moved: false };
-      lastActive = Date.now();
-    });
-    addEventListener('mousemove', (e) => {
-      if (!drag) return;
-      const ddx = e.clientX - drag.sx, ddy = e.clientY - drag.sy;
-      if (Math.abs(ddx) + Math.abs(ddy) >= 7) drag.moved = true;
-      if (drag.moved) { left = drag.l + ddx; top = drag.t + ddy; pet.style.left = left + 'px'; pet.style.top = top + 'px'; }
-    });
-    addEventListener('mouseup', (e) => {
-      if (!drag || e.button !== 0) return;
-      if (drag.moved) { clamp(); save(); }
-      drag = null;
-    });
-
-    /* ---------- right-click menu (MenuSetup) ---------- */
-    const menu = document.createElement('div');
-    menu.className = 'usagi-menu';
-    menu.innerHTML = '<button data-a="flip">좌우 반전</button><hr><button data-a="quit">우사기 종료</button>';
-    document.body.appendChild(menu);
-    const showMenu = (e) => {
-      e.preventDefault();
-      menu.style.left = Math.min(e.clientX, innerWidth - 140) + 'px';
-      menu.style.top = Math.min(e.clientY, innerHeight - 90) + 'px';
-      menu.classList.add('on');
-    };
-    pet.addEventListener('contextmenu', showMenu);
-    addEventListener('mousedown', (e) => { if (!menu.contains(e.target)) menu.classList.remove('on'); }, true);
-    menu.addEventListener('click', (e) => {
-      const a = e.target.dataset.a; if (!a) return;
-      menu.classList.remove('on');
-      if (a === 'flip') { flip = !flip; lastRender = ''; save(); tick(); }
-      if (a === 'quit') { pet.remove(); closeBubble(); store && store.setItem('usagi-hidden', '1'); }
-    });
-
     /* ---------- posture reminder bubble (PostureBubble) ---------- */
     let bubble = null, dismiss;
     const closeBubble = () => { if (bubble) { bubble.remove(); bubble = null; } clearTimeout(dismiss); };
@@ -158,10 +110,10 @@
       bubble = document.createElement('div');
       bubble.className = 'usagi-bubble';
       bubble.style.width = bw + 'px'; bubble.style.height = bh + 'px';
+      bubble.style.fontSize = (bw * 0.072).toFixed(1) + 'px';
       bubble.innerHTML = '<div class="usagi-bubble-art"></div><div class="usagi-bubble-text"></div><button class="usagi-bubble-x" aria-label="닫기"></button>';
       bubble.querySelector('.usagi-bubble-text').textContent = msg;
       bubble.querySelector('.usagi-bubble-x').addEventListener('click', closeBubble);
-      bubble.addEventListener('contextmenu', showMenu);
       document.body.appendChild(bubble);
       const place = () => {                       // PlaceNear()
         if (!bubble) return;
@@ -178,6 +130,17 @@
     };
     if (CFG.postureEnabled) setInterval(() => showBubble(CFG.postureMessage || '허리 펴! 우라!'), CFG.postureMinutes * 60000);
     window.usagiSay = showBubble;                 // e.g. usagiSay('허리 펴! 우라!') from the console
+
+    /* ---------- click: talk (30%: angry face "하아?") ---------- */
+    let moodTimer;
+    pet.addEventListener('click', () => {
+      lastActive = Date.now();
+      const poke = Math.random() < 0.3;
+      angry = poke; lastRender = '';
+      showBubble(poke ? '하아?' : (CFG.postureMessage || '허리 펴! 우라!'));
+      clearTimeout(dismiss); dismiss = setTimeout(closeBubble, 3000);
+      clearTimeout(moodTimer); moodTimer = setTimeout(() => { angry = false; lastRender = ''; }, 1500);
+    });
   };
 
   Promise.all(names.map(load)).then(start);
