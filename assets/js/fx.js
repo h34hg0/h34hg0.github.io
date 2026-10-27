@@ -71,7 +71,7 @@
     }
 
 
-    /* 10. Usagi buddy (bottom-right): face looks toward the cursor, idle bounce,
+    /* 10. Usagi buddy (bottom-right): face looks toward the cursor, paws swap on key press,
        falls asleep after 25s without input, reacts + talks on click. */
     if (innerWidth >= 768) {
       const IMG = '/assets/img/buddy/';
@@ -83,21 +83,24 @@
       ['body_base_2', 'body_base_sleep_1', 'face_angry', 'face_sleep'].forEach((n) => { new Image().src = IMG + n + '.webp'; });
       let mood = 'idle', frame = 0, lastInput = Date.now(), moodTimer, hide;
       const setFace = (n) => { face.src = IMG + n + '.webp'; };
-      const wake = () => { lastInput = Date.now(); if (mood === 'sleep') { mood = 'idle'; setFace('face_default'); b.classList.remove('fx-sleep'); } };
+      const wake = () => { lastInput = Date.now(); if (mood === 'sleep') { mood = 'idle'; setFace('face_default'); body.src = IMG + (frame ? 'body_base_2' : 'body_base_1') + '.webp'; b.classList.remove('fx-sleep'); } };
       addEventListener('mousemove', (e) => {
         wake();
         const r = b.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height * 0.55;
         const a = Math.atan2(e.clientY - cy, e.clientX - cx), d = Math.min(1, Math.hypot(e.clientX - cx, e.clientY - cy) / 300);
         face.style.transform = `translate(${(Math.cos(a) * 5 * d).toFixed(1)}px, ${(Math.sin(a) * 4 * d).toFixed(1)}px)`;
       });
-      addEventListener('keydown', wake); addEventListener('scroll', wake, { passive: true });
+      /* typing: each key press swaps the paws (body_base_1 <-> body_base_2), like the desktop pet */
+      addEventListener('keydown', () => {
+        wake(); frame ^= 1; body.src = IMG + (frame ? 'body_base_2' : 'body_base_1') + '.webp';
+        b.classList.remove('fx-tap'); void b.offsetWidth; b.classList.add('fx-tap');
+      });
+      addEventListener('scroll', wake, { passive: true });
       setInterval(() => {
         if (mood !== 'sleep' && Date.now() - lastInput > 25000) {
           mood = 'sleep'; setFace('face_sleep'); body.src = IMG + 'body_base_sleep_1.webp'; face.style.transform = ''; b.classList.add('fx-sleep');
         }
-        if (mood === 'sleep') return;
-        frame ^= 1; body.src = IMG + (frame ? 'body_base_2' : 'body_base_1') + '.webp';
-      }, 600);
+      }, 1000);
       b.addEventListener('click', (e) => {
         e.stopPropagation(); wake();
         const poke = Math.random() < 0.3;

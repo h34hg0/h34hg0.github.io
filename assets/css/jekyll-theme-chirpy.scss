@@ -91,6 +91,8 @@ html.fx-cursor, html.fx-cursor * { cursor: none !important; }
 .fx-buddy img { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; -webkit-user-drag: none; }
 .fx-buddy .fx-face { transition: transform .12s ease-out; }
 .fx-buddy.fx-hop { animation: fx-hop .45s ease; }
+.fx-buddy.fx-tap { animation: fx-tap .12s ease; }
+@keyframes fx-tap { 50% { transform: translateY(2px) scale(1.02, .98); } }
 .fx-buddy.fx-sleep { animation: fx-breathe 3s ease-in-out infinite; }
 @keyframes fx-hop { 30% { transform: translateY(-14px); } 60% { transform: translateY(0); } 80% { transform: translateY(-4px); } }
 @keyframes fx-breathe { 50% { transform: scale(1.03, .97) translateY(2px); } }
