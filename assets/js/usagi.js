@@ -111,9 +111,8 @@
       bubble.className = 'usagi-bubble';
       bubble.style.width = bw + 'px'; bubble.style.height = bh + 'px';
       bubble.style.fontSize = (bw * 0.072).toFixed(1) + 'px';
-      bubble.innerHTML = '<div class="usagi-bubble-art"></div><div class="usagi-bubble-text"></div><button class="usagi-bubble-x" aria-label="닫기"></button>';
+      bubble.innerHTML = '<div class="usagi-bubble-art"></div><div class="usagi-bubble-text"></div>';
       bubble.querySelector('.usagi-bubble-text').textContent = msg;
-      bubble.querySelector('.usagi-bubble-x').addEventListener('click', closeBubble);
       document.body.appendChild(bubble);
       const place = () => {                       // PlaceNear()
         if (!bubble) return;

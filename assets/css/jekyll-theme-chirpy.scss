@@ -93,12 +93,6 @@ html.fx-cursor, html.fx-cursor * { cursor: none !important; }
 .usagi-bubble-text { position: absolute; left: 14%; top: 13%; width: 70%; height: 52%; display: flex; align-items: center;
   justify-content: center; text-align: center; font-family: 'Malgun Gothic', sans-serif; font-weight: 700; font-size: inherit;
   color: rgb(62 40 36); overflow: hidden; }
-.usagi-bubble-x { position: absolute; left: 66.5%; top: 31%; width: 11%; height: 14%; border: 0;
-  background: none; cursor: pointer; }
-.usagi-bubble-x::before, .usagi-bubble-x::after { content: ''; position: absolute; left: 50%; top: 50%; width: 45%; height: 2px;
-  border-radius: 2px; background: rgb(62 40 36); }
-.usagi-bubble-x::before { transform: translate(-50%, -50%) rotate(45deg); }
-.usagi-bubble-x::after { transform: translate(-50%, -50%) rotate(-45deg); }
 #back-to-top { bottom: 10.5rem !important; }
 /* keep Chirpy's "새 콘텐츠가 있습니다 / 업데이트" toast above #main-wrapper (z-index 1), particles and the buddy */
 #notification { z-index: 10000 !important; }
