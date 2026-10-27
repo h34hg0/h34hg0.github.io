@@ -87,8 +87,10 @@
       addEventListener('mousemove', (e) => {
         wake();
         const r = b.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height * 0.55;
-        const a = Math.atan2(e.clientY - cy, e.clientX - cx), d = Math.min(1, Math.hypot(e.clientX - cx, e.clientY - cy) / 300);
-        face.style.transform = `translate(${(Math.cos(a) * 5 * d).toFixed(1)}px, ${(Math.sin(a) * 4 * d).toFixed(1)}px)`;
+        /* the buddy sits in the corner, so the cursor is almost always up-left of it:
+           ramp quickly (full range at ~120px away) and use a wider range so the gaze is visible */
+        const a = Math.atan2(e.clientY - cy, e.clientX - cx), d = Math.min(1, Math.hypot(e.clientX - cx, e.clientY - cy) / 120);
+        face.style.transform = `translate(${(Math.cos(a) * 10 * d).toFixed(1)}px, ${(Math.sin(a) * 8 * d).toFixed(1)}px)`;
       });
       /* typing: each key press swaps the paws (body_base_1 <-> body_base_2), like the desktop pet */
       addEventListener('keydown', () => {
