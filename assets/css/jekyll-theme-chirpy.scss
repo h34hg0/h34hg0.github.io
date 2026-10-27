@@ -48,21 +48,10 @@ body { font-family: 'Pretendard Variable', Pretendard, sans-serif; }
 h2 { border-bottom: 2px solid var(--link-color); padding-bottom: .2em; }
 
 /* ===== interaction effects (see assets/js/fx.js) ===== */
-/* 1. custom cursor */
-html.fx-cursor, html.fx-cursor * { cursor: none !important; }
-.fx-dot, .fx-ring { position: fixed; left: 0; top: 0; pointer-events: none; z-index: 9999; border-radius: 50%; }
-.fx-dot { width: 8px; height: 8px; margin: -4px 0 0 -4px; background: var(--link-color); }
-.fx-ring { width: 34px; height: 34px; margin: -17px 0 0 -17px; border: 2px solid var(--link-color);
-  transition: width .2s, height .2s, margin .2s, background-color .2s; }
-.fx-ring.fx-big { width: 56px; height: 56px; margin: -28px 0 0 -28px; background-color: rgb(232 121 185 / 15%); }
-/* 2. sparkle trail */
-.fx-spark { position: fixed; pointer-events: none; z-index: 9998; font-size: 13px; transform: translate(-50%, -50%);
-  animation: fx-fade .8s forwards; }
-@keyframes fx-fade { to { opacity: 0; transform: translate(-50%, 0) scale(.4); } }
-/* 3. click ripple */
-.fx-ripple { position: fixed; pointer-events: none; z-index: 9998; width: 10px; height: 10px; margin: -5px 0 0 -5px;
-  border-radius: 50%; border: 2px solid var(--link-color); animation: fx-rip .6s ease-out forwards; }
-@keyframes fx-rip { to { width: 90px; height: 90px; margin: -45px 0 0 -45px; opacity: 0; } }
+/* 1. cursor: pink arrow (white arrow on clickable things); text fields keep the I-beam */
+html, body { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cpath d='M3 2 L3 19 L8 14.5 L11.5 22 L14.5 20.6 L11 13.3 L17.5 13.3 Z' fill='%23e879b9' stroke='%2316131f' stroke-width='1.4' stroke-linejoin='round'/%3E%3C/svg%3E") 3 2, auto; }
+a, button, [role="button"], label, summary, select, .card-wrapper, .usagi-pet, #sidebar .nav-link { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cpath d='M3 2 L3 19 L8 14.5 L11.5 22 L14.5 20.6 L11 13.3 L17.5 13.3 Z' fill='%23ffffff' stroke='%23c13584' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E") 3 2, pointer !important; }
+input, textarea, [contenteditable="true"] { cursor: text; }
 /* 4. reading progress bar */
 .fx-progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 9997;
   background: linear-gradient(90deg, #7b2ff7, #e879b9); transition: width .1s linear; }

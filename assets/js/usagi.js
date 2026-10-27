@@ -1,13 +1,12 @@
 /* Usagi desktop pet — web port of UsagiDesktopPet (Pet.cs / PostureBubble.cs).
  * Same artwork crop, face-on-body compositing with the body safety mask,
- * cursor gaze math, typing paw swap, 3-minute auto sleep and the posture bubble.
- * Blog version: smaller, fixed in the bottom-right corner, click to talk. */
+ * cursor gaze math, typing paw swap and 3-minute auto sleep.
+ * Blog version: smaller, fixed bottom-right; click toggles the angry face ("하아?"). */
 (() => {
   if (!matchMedia('(pointer: fine)').matches || innerWidth < 768) return;
 
   const CFG = {
     scale: 55, faceX: 0, faceY: 115, tracking: 133, flip: false, angry: false,
-    postureEnabled: false, postureMinutes: 37, postureMessage: '허리 펴! 우라!',
   };
   const IMG = '/assets/img/buddy/';
   const SW = 471, SH = 564;                       // cropped source size (Rectangle(64,18,471,564))
@@ -58,7 +57,6 @@
     const tick = () => {
       if (keyPending) { frame ^= 1; keyPending = 0; lastActive = Date.now(); }
       const sleeping = Date.now() - lastActive >= SLEEP_MS;
-      if (wasSleeping && !sleeping) angry = false;
       wasSleeping = sleeping;
       if (sleeping) frame = 0;
       const body = sleeping ? 'body_base_sleep_1' : frame === 1 ? 'body_base_2' : 'body_base_1';
@@ -99,7 +97,7 @@
     };
     setInterval(tick, 30); tick();
 
-    /* ---------- posture reminder bubble (PostureBubble) ---------- */
+    /* ---------- speech bubble (PostureBubble art/layout) ---------- */
     let bubble = null, dismiss;
     const closeBubble = () => { if (bubble) { bubble.remove(); bubble = null; } clearTimeout(dismiss); };
     const showBubble = (msg) => {
@@ -127,18 +125,13 @@
       place();
       dismiss = setTimeout(closeBubble, 15000);
     };
-    if (CFG.postureEnabled) setInterval(() => showBubble(CFG.postureMessage || '허리 펴! 우라!'), CFG.postureMinutes * 60000);
-    window.usagiSay = showBubble;                 // e.g. usagiSay('허리 펴! 우라!') from the console
 
-    /* ---------- click: talk (30%: angry face "하아?") ---------- */
-    let moodTimer;
+    /* ---------- click: toggle angry face (kept until the next click); "하아?" when it turns angry ---------- */
     pet.addEventListener('click', () => {
       lastActive = Date.now();
-      const poke = Math.random() < 0.3;
-      angry = poke; lastRender = '';
-      showBubble(poke ? '하아?' : (CFG.postureMessage || '허리 펴! 우라!'));
-      clearTimeout(dismiss); dismiss = setTimeout(closeBubble, 3000);
-      clearTimeout(moodTimer); moodTimer = setTimeout(() => { angry = false; lastRender = ''; }, 1500);
+      angry = !angry; lastRender = '';
+      if (angry) { showBubble('하아?'); clearTimeout(dismiss); dismiss = setTimeout(closeBubble, 2500); }
+      else closeBubble();
     });
   };
 

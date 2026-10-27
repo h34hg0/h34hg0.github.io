@@ -1,50 +1,11 @@
-/* Blog interaction effects (cursor, click ripple, trail, progress bar,
- * typing subtitle, card reveal, background particles, sidebar power trace).
- * Motion effects are skipped when the OS asks for reduced motion;
- * cursor effects only run on devices with a fine pointer (mouse). */
+/* Blog interaction effects (progress bar, typing subtitle, card reveal, background particles, sidebar power trace).
+ * Motion effects are skipped when the OS asks for reduced motion. */
 (() => {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const fine = matchMedia('(pointer: fine)').matches;
   const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim() || '#e879b9';
   const el = (tag, cls, parent = document.body) => { const e = document.createElement(tag); if (cls) e.className = cls; parent.appendChild(e); return e; };
 
-  /* 1. custom cursor: dot + lagging ring that grows over links */
-  if (fine && !reduce) {
-    document.documentElement.classList.add('fx-cursor');
-    const dot = el('div', 'fx-dot'), ring = el('div', 'fx-ring');
-    let x = -100, y = -100, rx = x, ry = y;
-    addEventListener('mousemove', (e) => {
-      x = e.clientX; y = e.clientY;
-      dot.style.transform = `translate(${x}px, ${y}px)`;
-      ring.classList.toggle('fx-big', !!(e.target.closest && e.target.closest('a, button, input, label, [role="button"], .card-wrapper, .usagi-pet')));
-    });
-    document.addEventListener('mouseleave', () => { dot.style.opacity = ring.style.opacity = 0; });
-    document.addEventListener('mouseenter', () => { dot.style.opacity = ring.style.opacity = 1; });
-    (function loop() {
-      rx += (x - rx) * 0.18; ry += (y - ry) * 0.18;
-      ring.style.transform = `translate(${rx}px, ${ry}px)`;
-      requestAnimationFrame(loop);
-    })();
-
-    /* 2. sparkle trail */
-    let last = 0;
-    addEventListener('mousemove', (e) => {
-      const now = performance.now(); if (now - last < 40) return; last = now;
-      const s = el('span', 'fx-spark'); s.textContent = Math.random() < 0.5 ? '✦' : '•';
-      s.style.left = e.clientX + 'px'; s.style.top = e.clientY + 'px';
-      s.style.color = Math.random() < 0.5 ? css('--link-color') : '#b794f6';
-      setTimeout(() => s.remove(), 800);
-    });
-  }
-
-  /* 3. click ripple */
-  if (!reduce) {
-    addEventListener('click', (e) => {
-      const r = el('span', 'fx-ripple');
-      r.style.left = e.clientX + 'px'; r.style.top = e.clientY + 'px';
-      setTimeout(() => r.remove(), 600);
-    });
-  }
+  /* 1-3. cursor: plain pink arrow, pure CSS (see .scss) */
 
   document.addEventListener('DOMContentLoaded', () => {
     /* 4. reading progress bar (post pages only) */
