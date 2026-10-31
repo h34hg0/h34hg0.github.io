@@ -28,8 +28,8 @@ order: 2
 | 2022.07 ~ 2023.03 | KITRI BoB (Best of the Best) 11기 수료 — 보안제품개발 트랙 |
 | 2023.10 | 제4회 JBU-CTF Crypto 출제 및 운영 |
 | 2024.04 ~ 2026.01 | 대한민국 공군 정보보호병 병장 만기 전역 |
-| 2024.10 | 제5회 JBU-CTF Crypto 출제 |
-| 2025.10 | 제6회 JBU-CTF Crypto 출제 |
+| 2024.10 | 제5회 JBU-CTF Crypto 출제 및 운영 |
+| 2025.10 | 제6회 JBU-CTF Crypto 출제 및 운영 |
 | 2026.09 | 제7회 JBU-CTF Crypto 출제 및 운영 |
 | 2026.10 ~ | HSPACE 나이츠 프론티어 (Knights Frontier) 3기 |
 
