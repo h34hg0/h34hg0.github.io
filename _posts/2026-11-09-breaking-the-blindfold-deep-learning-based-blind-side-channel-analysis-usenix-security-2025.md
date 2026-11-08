@@ -147,10 +147,10 @@ DL-BSCA는 Chipwhisperer, Kyber, Ascon을 대상으로 기존 연구된 BSCA 프
 
 아래의 두 단계로 이루어지게 된다.
 
-- POI 선택  
+- **POI 선택**  
   HW(m)을 나타내는 적절한 PoI와 HW(y)를 나타내는 또 다른 적절한 PoI를 각각 하나씩 식별한다.  
   \*\* 이 연구와 선행 연구 모두 공격자가 PoI를 정확하게 찾을 수 있다는 이전 연구들의 가정을 따르며, PoI를 식별하는 과정은 non-blind 부분이다.\*\*
-- 트레이스 라벨링  
+- **트레이스 라벨링**  
   선택된 PoI를 사용하여 경험적 분포를 얻는다. 기존 연구에 제안된 두 가지 라벨링 기법인 Slicing labeling과 Variance Analysis(VA) labeling을 사용한다.
 
 **3. 경험적 분포와 이론적 결합 분포 비교**
@@ -223,9 +223,9 @@ DL-BSCA 은 section 2.2에 개략적으로 설명된 동일한 세 단계로 구
 
 DL-BSCA는 트레이스를 두 개의 세트로 분할
 
-학습 트레이스(training traces) : 특정 라벨링 기법을 사용하여 라벨이 지정
+**학습 트레이스(training traces) :** 특정 라벨링 기법을 사용하여 라벨이 지정
 
-공격 트레이스(attack traces) : 학습된 DNN을 통과시켜 경험적 분포를 얻음.
+**공격 트레이스(attack traces) :** 학습된 DNN을 통과시켜 경험적 분포를 얻음.
 
 라벨링 기법으로 인해 많은 트레이스에 잘못된 라벨이 지정될 수 있으므로, DL-BSCA는 노이즈가 있는 라벨(noisy labels)로 DNN을 학습시킨다.
 
@@ -271,7 +271,7 @@ MC 라벨링은 DL_BSCA와 결합되어 DNN 학습 트레이스를 라벨링하�
 
 #### 4.1 Neural Networks and Hyperparameter Search Space
 
-이전 연구에서 보고된 범위를 기반으로 아래의 표 [8](https://www.themoonlight.io/extension/release/3.7.4-00d96f0c3abd/web/pdf.html?origin=https%3A%2F%2Fmoonlight-paper.s3.ap-northeast-2.amazonaws.com%2Fanonymous%2Fc828f2f0-746a-4d30-b925-783d4752584c.pdf&file=blob%3Ahttps%3A%2F%2Fwww.themoonlight.io%2F5165993a-b0de-4d17-bf71-e75b9e04c43c&language=ko&paperId=2f85fe3c-1690-4ea6-84d8-5cbe6e55a619&isPaperOwner=true#table.caption.45)에 나열된 범위에서 서로 다른 하이퍼파라미터를 선택하여 무작위로 샘플링한다.
+이전 연구에서 보고된 범위를 기반으로 아래의 표 8에 나열된 범위에서 서로 다른 하이퍼파라미터를 선택하여 무작위로 샘플링한다.
 
 ![tistory-999998-5](/assets/img/posts/breaking-the-blindfold-deep-learning-based-blind-side-channel-analysis-usenix-security-2025/tistory-999998-5.png)
 *Table 8: Hyperparameters search space for MLP and CNN.*
@@ -452,5 +452,3 @@ Slicing과 VA 라벨링을 모두 사용할 경우 GE > 10 이며, DL-BSCA와 MC
 <https://www.usenix.org/system/files/usenixsecurity25-rezaeezade.pdf>
 
 <https://www.usenix.org/conference/usenixsecurity25/presentation/rezaeezade?utm_source=openai>
-
-[Breaking the Blindfold: Deep Learning-based Blind Side-channel Analysis | USENIX](https://www.usenix.org/conference/usenixsecurity25/presentation/rezaeezade?utm_source=openai)
