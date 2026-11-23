@@ -2,7 +2,7 @@
 title: "Attention Is All You Need — NeurIPS 2017"
 date: 2026-11-23 12:53:19 +0900
 categories: ["논문/컨퍼런스", "논문 리뷰"]
-tags: []
+tags: ["Attention Is All You Need", "NeurIPS 2017"]
 tistory_url: https://heahgo.tistory.com/entry/Attension-is-All-you-need-%EB%A6%AC%EB%B7%B0
 published: true
 obsidian_source: "6. Posts/tistory/논문 컨퍼런스 - 논문 리뷰/Attention Is All You Need — NeurIPS 2017.md"
