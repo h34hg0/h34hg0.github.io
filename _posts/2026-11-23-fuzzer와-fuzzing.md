@@ -1,7 +1,7 @@
 ---
 title: "Fuzzer와 Fuzzing"
 date: 2026-11-23 14:00:00 +0900
-categories: ["Bug Bounty", "블로그/기술문서"]
+categories: ["블로그/기술문서", "etc"]
 tags: ["Fuzzing", "Fuzzer", "AFL++", "libFuzzer", "Jackalope"]
 published: true
 ---

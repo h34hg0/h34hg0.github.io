@@ -1,7 +1,7 @@
 ---
 title: "OWASP Top 10:2025 - A04 Cryptographic Failures"
 date: 2026-11-24 19:00:00 +0900
-categories: ["블로그/기술문서", "Cryptography"]
+categories: ["블로그/기술문서", "etc"]
 tags: ["OWASP Top 10", "Cryptographic Failures", "암호학", "암호화"]
 published: true
 obsidian_source: "6. Posts/tistory/Cryptography/OWASP Top 10 2025 - Cryptographic Failures.md"
